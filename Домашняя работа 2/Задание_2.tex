@@ -1,0 +1,169 @@
+\documentclass[a4paper,12pt]{article}
+\usepackage[T2A]{fontenc}
+\usepackage[utf8]{inputenc}	
+\usepackage[english,russian]{babel}	
+\usepackage{amsmath,amsfonts,amssymb,amsthm,mathtools} 
+\usepackage[left=16mm,  top=15mm,  right=16mm,  bottom=20mm, nohead, nofoot]{geometry}
+\usepackage{graphicx}
+\graphicspath{{pictures/}}
+\DeclareGraphicsExtensions{.pdf,.png,.jpg}
+\usepackage{wasysym}
+\usepackage{tikz}
+\usepackage[unicode, pdftex]{hyperref}
+
+\begin{document} 
+
+\begin{center}
+    \textbf{Лабораторная работа 2}\\
+    \textbf{Богданов Александр, Б05-003}
+\end{center}
+
+Запишем информацию о ручках:
+
+\begin{center}
+    \begin{tabular}{|c|c|c|}
+        \hline
+        \text { Ручка } & \text { Средння награда } & \text { Количество использований } \\
+        \hline
+        1 & 4.6 & 181 \\
+        2 & 4.3 & 21 \\
+        3 & 4.7 & 384  \\
+        \hline
+    \end{tabular}
+\end{center}
+
+Общее количество использований: t = 586.
+
+\section{Задача}
+
+\subsection{Задача}
+    \textbf{Условие:} Найдите $\varepsilon$-жадная стратегию.
+    $\pi_{\varepsilon}$ (положите $\varepsilon$ = 0.01).
+
+    \begin{align*}
+        a_t = 
+        \begin{cases}
+            \arg \max\limits_{a \in A} Q(a) & \text{с вероятностью}\ \varepsilon \\
+            \text{random} (A) & \text{с вероятностью}\ 1 - \varepsilon
+        \end{cases}
+    \end{align*}
+
+    В $\varepsilon$ случаях выбирается случайная ручка, в $1 - \varepsilon$ выбирается оптимальная ручка, тогда $\varepsilon$-жадная политика: $\pi_{\varepsilon} = \left[ \frac{\varepsilon}{3}; \frac{\varepsilon}{3}; \frac{\varepsilon}{3} + 1 - \varepsilon \right] = \left[ \frac{\varepsilon}{3}; \frac{\varepsilon}{3}; 1 - \frac{2 \varepsilon}{3} \right] = [0.0033, 0.0033, 0.9933]$.
+
+\subsection{Задача}
+    \textbf{Условие:} Найдите UCB стратегию $\pi_\text{UCB}$ ($\alpha = 0.5$).
+
+    \begin{align*}
+        a_t = \arg \max_{a \in A} Q(a) + \alpha \sqrt{\frac{\log t}{N_t (a)}}
+    \end{align*}
+
+    \begin{center}
+        \begin{tabular}{|c|c|c|c|}
+            \hline
+            \text { Ручка } & \text { Средняя награда (отнормированная) } & \text { Добавочная константа } & \text { Сумма }\\
+            \hline
+            1 & 0.920 & 0.094 & 1.014\\
+            2 & 0.860 & 0.275 & 1.135\\
+            3 & 0.980 & 0.064 & 1.044\\
+            \hline
+        \end{tabular}
+    \end{center}
+
+    То есть UCB политика: $\pi_\text{UCB} = [0, 1, 0]$.
+
+\subsection{Задача}
+    \textbf{Условие:} Что нужно чтобы применить здесь томсоновское сэмплирование?
+
+    \begin{enumerate}
+        \item Ввести априорное распределение.
+        \item Уметь к априорному распределению строить сопряженное. Для бинарного автомата обычно берут $beta$ распределение. Наш автомат не бинарный, но можно провести бинаризацию: 1, 2, 3 -неудача; 4, 5 - успех.
+    \end{enumerate}
+
+\section{Задача}
+
+\subsection{Задача}
+    \textbf{Условие:} посчитайте logging policy $\pi_0$.
+
+    Оценим частотной оценкой: $\pi_0 = [0.309, 0.036, 0.655]$.
+
+\subsection{Задача}
+    \textbf{Условие:} Oцените стратегию $\pi_1$ = [0.3, 0.04, 0.66].
+
+    \begin{align*}
+        \hat{V} (\pi_1, D) = \mathbb{E}_{p(x) \pi_1 (a|x) p(r|x, a)}[r] = \mathbb{E}_{\pi_1 (a) p(r|a)}[r] = \sum_{a, r} r p(r|a) \pi_1 (a) = \sum_a \mathbb{E} [r|a] \pi_1 (a)
+    \end{align*}
+
+    \begin{align*}
+        \hat{V} (\pi_1, D) = 0.3 * 4.6 + 0.04 * 4.3 + 0.66 * 4.7 = 4.654 
+    \end{align*}
+
+\subsection{Задача}
+    \textbf{Условие:} Oцените стратегию $\pi_2$ = [0.3, 0.66, 0.04].
+
+    \begin{align*}
+        \hat{V} (\pi_2, D) = \mathbb{E}_{p(x) \pi_2 (a|x) p(r|x, a)}[r] = \mathbb{E}_{\pi_2 (a) p(r|a)}[r] = \sum_{a, r} r p(r|a) \pi_2 (a) = \sum_a \mathbb{E} [r|a] \pi_2 (a)
+    \end{align*}
+
+    \begin{align*}
+        \hat{V} (\pi_2, D) = 0.3 * 4.6 + 0.66 * 4.3 + 0.04 * 4.7 = 4.406 
+    \end{align*}
+
+\subsection{Задача}
+    \textbf{Условие:} Oцените стратегию $\pi_{\varepsilon}$ и $\pi_\text{UCB}$. 
+
+    \begin{align*}
+        \hat{V} (\pi, D) = \mathbb{E}_{p(x) \pi (a|x) p(r|x, a)}[r] = \mathbb{E}_{\pi (a) p(r|a)}[r] = \sum_{a, r} r p(r|a) \pi (a) = \sum_a \mathbb{E} [r|a] \pi (a)
+    \end{align*}
+        
+    \begin{enumerate}
+        \item Так как политика $\pi_{\varepsilon}$ не меняется, то можно оценить как в предыдущих задачах:
+
+        \begin{align*}
+            \hat{V} (\pi, D) = 0.0033 * 4.6 + 0.0033 * 4.3 + 0.9933 * 4.7 = 4.698 
+        \end{align*}
+
+        \item Политика $\pi_\text{UCB}$ = [0, 1, 0] после некоторого количества использований поменяется на $\pi_\text{UCB}$ = [0, 0, 1], поэтому ее можно оценить так:
+
+        \begin{align*}
+            4.3 \leq \hat{V} (\pi, D) \leq 4.7
+        \end{align*}
+        
+    \end{enumerate}
+    
+\subsection{Задача}
+    \textbf{Условие:} Проанализируйте результаты. Возможно ли оценить стратегии из 3 предыдущих пунктов с адекватной точностью?
+
+    $\pi_1$, $\pi_2$, $\pi_{\varepsilon}$, можно оценить явно посчитав. $\pi_\text{UCB}$ можно оценить интервалом -- интервал не очень большой, поэтому оценка достаточно точная.
+
+\section{Задача}
+
+\subsection{Задача}
+    \textbf{Условие:} Докажите что оценивание стратегий через IPS несмещенное.
+
+    \begin{align*}
+        \hat{V}_{\text{IPS}} (\pi_{test}, D) = \frac{1}{n} \sum_{i = 1}^n \frac{\pi_{test} (a_i, x_i)}{\pi_0 (a_i, x_i)} \cdot r_i, 
+    \end{align*}
+
+    где
+
+    \begin{align*}
+        D = \{ (x_i, a_i, r_i)\}_{i = 1}^n \sim \prod_{i = 1}^n p (x_i) \pi_0 (a_i|x_i) p(r_i|x_i, a_i)
+    \end{align*}
+
+    \begin{align*}
+        \mathbb{E}_D \left[ \hat{V}_{\text{IPS}} (\pi_{test}, D) \right]
+        &=
+        \frac{1}{n} \sum_{i = 1}^n \int p (x_i) \pi_0 (a_i|x_i) p(r_i|x_i, a_i) \frac{\pi_{test} (a_i, x_i)}{\pi_0 (a_i, x_i)} r_i \\
+        &=
+        \int p (x_i) \pi_{test} (a_i, x_i) p(r_i|x_i, a_i) r_i\\
+        &=
+        \mathbb{E}_{p(x) \pi_{test} (a|x) p(r|x, a)}[r] = V(\pi_{test})
+    \end{align*}
+
+
+\subsection{Задача}
+    \textbf{Условие:} При каких необходимых условиях выполняется несмещенность?
+
+    Если $\pi_0$ может генерировать все действия, которые может сгенерировать $\pi_{test}$, иначе будет интеграл не по всему множеству.
+
+\end{document}
